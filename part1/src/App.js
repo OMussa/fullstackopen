@@ -9,9 +9,13 @@ const Button = (props)=>{
 
 const StatisticLine = (props) =>{
   return(
-    <div>
-<p>{props.text} {props.value}</p>
-</div>
+    <table>
+      <tbody>
+      <tr>
+<td>{props.text} {props.value}</td>
+</tr>
+</tbody>
+</table>
   )
 }
 
