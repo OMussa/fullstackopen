@@ -16,25 +16,37 @@ const App = () => {
     'The only way to go fast, is to go well.'
   ]
   const [selected, setSelected] = useState(0)
-  const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0))
+  /*state variable called votes that is initially an array of zeroes with the same length as the anecdotes array. 
+  We can than use the votes variable to keep track of the number of votes for each anecdote,
+   and we can use the setVotes function to update the votes variable when a user clicks the "vote" button. */
+  const [votes,setVotes] = useState(new Array(anecdotes.length).fill(0))
 
 const handleAnec = () =>{
   setSelected(Math.floor(Math.random() * anecdotes.length)) }
 
   
+const handleVote = () =>{
+  const newVote = [...votes]
+  newVote[selected] +=1
+  setVotes(newVote)
+  console.log(newVote)
+}
 
-  const handleVote = () =>{
-    const newVotes = [...votes]
-    newVotes[selected] +=1
-    setVotes(newVotes)
-  }
+  
+  
+//votes.indexOf(Math.max(...votes)): This finds the index of the maximum value in the votes array.
+  const max = votes.indexOf(Math.max(...votes))
 
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       {anecdotes[selected]}
       <p>has {votes[selected]} votes</p>
       <Button handleClick = {handleVote}  text = 'vote' />
       <Button handleClick = {handleAnec}  text = 'next anecdote' />
+      <h1>Anecdote with most votes</h1>
+      {anecdotes[max]}
+      <p>has {votes[max]} votes</p>
     </div>
   )
 }
