@@ -1,15 +1,18 @@
 
 const Course = ({course}) =>{
-  const total = course.parts.reduce((current,sum) => current + sum.exercises , 0)
   return (
+    
     <div>
-      <h1>{course.name}</h1>
+      <h1>Web development curriculum</h1>
+    {course.map(course => <div key ={course.id}>
+      <h2>{course.name}</h2>
       <ul>
-      {course.parts.map(part=><li key={part.id}>{part.name} {part.exercises}</li>)}
-      <li>
-        <b>total of {total} exercises</b>
-        </li>
+        {course.parts.map(parts=> <li key = {parts.id}>
+          {parts.name} {parts.exercises}
+        </li>)}
       </ul>
+      <b> total of {course.parts.reduce((current,sum)=>current + sum.exercises ,0 )} exercises</b>
+      </div>)}
     </div>
   )
 }
