@@ -24,10 +24,15 @@ useEffect(()=>{
  
   const addNameNumber = (event) =>{
     event.preventDefault() //prevents page from refreshing
-    if(persons.find(person=> person.name == newName)){
+    if(newName == '' || numbers == ''){
+      alert('Name and Number must be provided')
+
+    }else if(persons.find(person=> person.name == newName)){
       alert(`${newName} is already added to the phonebook`)
+
     }else if(persons.find(person=> person.number == numbers)){
       alert(`${numbers} is already added to the phonebook`)
+
     }else{
     const nameObject = {
       name: newName,
@@ -37,6 +42,11 @@ useEffect(()=>{
     setPersons(persons.concat(nameObject))
     setNewName('')
     setNumber('')
+    axios
+.post('http://localhost:3001/persons',nameObject)
+.then(response => {
+  console.log(response.data)
+})
   }
 
   }
