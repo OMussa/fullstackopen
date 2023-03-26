@@ -63,6 +63,22 @@ useEffect(()=>{
     console.log(event.target.value)
     setSearch(event.target.value)
   }
+
+  const handleDelete = (id) => {
+    const personToDelete = persons.find(person => person.id === id)
+    const confirmed = window.confirm(`Are you sure you want to delete ${personToDelete.name}?`)
+    
+    if (confirmed) {
+      noteService
+        .remove(id)
+        .then(response => {
+          setPersons(persons.filter(person => person.id !== id))
+        })
+        .catch(error => {
+          console.log(`Error deleting person with ID ${id}: ${error}`)
+        })
+    }
+  }
   
   
   return (
@@ -73,7 +89,7 @@ useEffect(()=>{
       <h2>add a new</h2>
       <PersonForm handleNote = {handleNoteChange} handleNumber ={handleNumberChange} NameNumber ={addNameNumber}/>
       <h2>Numbers</h2>
-      <Persons persons={persons} search={search}/>
+      <Persons persons={persons} search={search} handleDelete = {handleDelete}/>
       
     </div>
     
