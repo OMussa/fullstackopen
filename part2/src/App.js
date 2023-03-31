@@ -4,6 +4,7 @@ import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import axios from 'axios'
 import noteService from './services/person'
+import { v4 as uuidv4 } from 'uuid';
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
@@ -25,32 +26,44 @@ useEffect(()=>{
  
   const addNameNumber = (event) =>{
     event.preventDefault() //prevents page from refreshing
-    if(newName == '' || numbers == ''){
+    if(newName === '' || numbers === ''){
       alert('Name and Number must be provided')
-
-    }else if(persons.find(person=> person.name == newName)){
-      alert(`${newName} is already added to the phonebook`)
-
-    }else if(persons.find(person=> person.number == numbers)){
-      alert(`${numbers} is already added to the phonebook`)
-
-    }else{
-    const nameObject = {
-      name: newName,
-      number: numbers,
-      id: persons.length + 1
+    } else {
+      const existingPerson = persons.find(person => person.name === newName)
+      if (existingPerson) {
+        const confirmed = window.confirm(`${newName} is already added to the phonebook. Do you want to update their phone number?`)
+        if (confirmed) {
+          const updatedPerson = {...existingPerson, number: numbers}
+          noteService
+            .update(existingPerson.id, updatedPerson)
+            .then(response => {
+              setPersons(persons.map(person => person.id !== existingPerson.id ? person : response.data))
+            })
+            .catch(error => {
+              console.log(`Error updating person with ID ${existingPerson.id}: ${error}`)
+            })
+        }
+      } else {
+        const nameObject = {
+          name: newName,
+          number: numbers,
+          id: uuidv4()
+        }
+        setPersons(persons.concat(nameObject))
+        setNewName('')
+        setNumber('')
+        noteService
+          .create(nameObject)
+          .then(response => {
+            console.log(response.data)
+          })
+          .catch(error => {
+            console.log(`Error creating person: ${error}`)
+          })
+      }
     }
-    setPersons(persons.concat(nameObject))
-    setNewName('')
-    setNumber('')
-    noteService
-.create(nameObject)
-.then(response => {
-  console.log(response.data)
-})
   }
-
-  }
+  
   const handleNoteChange = (event) => {
     console.log(event.target.value)
     setNewName(event.target.value)
