@@ -17,16 +17,16 @@ const App = () => {
      setCountries(response.data)
     })
     },[]) 
-    console.log(countries)
+    
     const handleFilter = (event)=>{
       console.log(event.target.value)
       setSearch(event.target.value)
     }
-
+  
   return (
    <div>
     <Filter onChange = {handleFilter} value={search} />
-   <Countries countries={countries} search = {search} />
+   <Countries countries={countries} search = {search}  />
     
    </div>
   );
