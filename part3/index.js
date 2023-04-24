@@ -1,8 +1,8 @@
 const http = require('http')
 const express = require('express')
 const app = express()
-
 app.use(express.json())
+
 let persons = [
     { 
       "id": 1,
@@ -27,6 +27,17 @@ let persons = [
 ]
 app.get('/api/persons',(request,response)=>{
     response.json(persons)
+})
+
+app.get('/api/persons/:id', (request,response) =>{
+    const id = request.params.id
+    const numberId = persons.find(person => person.id == id)
+    if(numberId){
+        response.json(numberId)
+    }else{
+        response.status(404).end()
+    }
+   
 })
 
 app.get('/info',(request,response)=>{
