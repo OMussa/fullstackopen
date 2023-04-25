@@ -74,6 +74,10 @@ const generateId = () => {
       return response.status(400).json({ 
         error: 'content missing' 
       })
+    } else if(persons.find(person => person.name == body.name)){
+        return response.status(400).json({ 
+            error: 'name must be unique' 
+          })
     }
   
     const person = {
